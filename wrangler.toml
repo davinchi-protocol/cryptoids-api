@@ -1,0 +1,15 @@
+name = "dcoin-cryptoids"
+type = "javascript"
+
+account_id = "your-cloudflare-account-id"
+workers_dev = true
+route = { pattern = "prod.davinci.bz/*", zone_name = "api-static.davinci.bz" }
+zone_id = "api-static.davinci.bz"
+
+[build]
+command = "npm install"
+
+[env.production]
+workers_dev = true
+route = "prod.davinci.bz/*"
+zone_id = "api-static.davinci.bz"

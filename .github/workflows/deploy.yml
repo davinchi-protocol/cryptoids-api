@@ -1,0 +1,44 @@
+name: Deploy Worker.js to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build API
+        run: |
+          mkdir -p public
+          echo "export default { async fetch(request) {" > public/worker.js
+          echo "const cacheUrl = new URL(request.url);" >> public/worker.js
+          echo "const queries = cacheUrl.searchParams;" >> public/worker.js
+          echo "const q = queries.get(\"q\");" >> public/worker.js
+          echo "const STATIC_SUPPLY = \"100000000\";" >> public/worker.js
+          echo "switch (q) {" >> public/worker.js
+          echo "case \"maxcoins\":" >> public/worker.js
+          echo "case \"totalcoins\":" >> public/worker.js
+          echo "case \"circulating\": return new Response(STATIC_SUPPLY, { status: 200 });" >> public/worker.js
+          echo "default: return new Response(JSON.stringify({ contract: null, symbol: \"DCoin\", supply: STATIC_SUPPLY }));" >> public/worker.js
+          echo "}" >> public/worker.js
+          echo "}};" >> public/worker.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

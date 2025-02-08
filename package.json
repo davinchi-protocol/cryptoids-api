@@ -1,0 +1,13 @@
+{
+  "name": "api-dcoin-static",
+  "description": "davinci-public-api-cryptoids",
+  "version": "1.0.0",
+  "main": "worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy" : "wrangler publish"
+  },
+  "keywords": [],
+  "author": "avenbreaks",
+  "license": "ISC"
+}
